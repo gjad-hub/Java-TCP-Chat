@@ -90,7 +90,7 @@ public class Client {
                         if (!tmp.equals("To")) {
                             JsonLoader.LoadFile();
                             if (tmp.equals("lp")) {
-                                JsonLoader.addMessage("lp", "lp", recivedMessage);
+                                JsonLoader.addMessage(tmp, tmp, recivedMessage);
                             } else {
                                 JsonLoader.addMessage(tmp, this.username, recivedMessage);
                             }
