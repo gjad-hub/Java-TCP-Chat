@@ -29,6 +29,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <exec.mainClass>pt.ua.estga.project4.Project4</exec.mainClass>
+        <exec.mainClass>pt.ua.estga.project4.Interfaces.Main</exec.mainClass>
     </properties>
 </project>

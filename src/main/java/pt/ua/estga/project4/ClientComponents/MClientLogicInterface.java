@@ -1,4 +1,4 @@
-package pt.ua.estga.project4;
+package pt.ua.estga.project4.ClientComponents;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,55 +10,86 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
-public class Client {
+/**
+ *
+ * @author gonc, ricar
+ */
+public class MClientLogicInterface {
 
+    /**
+     *
+     */
     private Socket socket;
+
+    /**
+     *
+     */
     private BufferedReader reader;
+
+    /**
+     *
+     */
     private BufferedWriter writer;
+
+    /**
+     *
+     */
     private String username;
 
+    /**
+     *
+     * @return
+     */
     public String getUsername() {
         return username;
     }
 
-    public Client(Socket Socket, String username) {
+    /**
+     *
+     * @param Socket
+     * @param username
+     */
+    public MClientLogicInterface(Socket Socket, String username) {
         try {
             this.socket = Socket;
             this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.username = username;
 
-            writer.write(username);
-            writer.newLine();
-            writer.flush();
+            sendTCPMessageToClient(username);
 
             String check = reader.readLine();
 
             if (check.equals("new@user")) {
-                writer.write(JOptionPane.showInputDialog("Primeiro Nome:"));
-                writer.newLine();
-                writer.flush();
+                sendTCPMessageToClient(JOptionPane.showInputDialog("First Name:"));
 
-                writer.write(JOptionPane.showInputDialog("Ultimo Nome:"));
-                writer.newLine();
-                writer.flush();
+                sendTCPMessageToClient(JOptionPane.showInputDialog("Last Name:"));
             }
 
         } catch (IOException e) {
-            closeAll();
+            closeNetworkHandles();
         }
     }
 
-    public void send(String message) {
+    /**
+     *
+     * @param message
+     */
+    public void sendTCPMessageToClient(String message) {
         try {
             writer.write(message);
             writer.newLine();
             writer.flush();
         } catch (IOException e) {
-            closeAll();
+            closeNetworkHandles();
         }
     }
 
+    /**
+     *
+     * @param modelMessages
+     * @param modelUsers
+     */
     public void listen(DefaultListModel modelMessages, DefaultListModel modelUsers) {
         new Thread(() -> {
             String recivedMessage;
@@ -88,11 +119,11 @@ public class Client {
                         String tmp = recivedMessage.split(":")[0];
 
                         if (!tmp.equals("To")) {
-                            JsonLoader.LoadFile();
-                            if (tmp.equals("lp")) {
-                                JsonLoader.addMessage(tmp, tmp, recivedMessage);
+                            ServerJsonLoader.LoadFile();
+                            if (tmp.equals("Global")) {
+                                ServerJsonLoader.addMessage(tmp, tmp, recivedMessage);
                             } else {
-                                JsonLoader.addMessage(tmp, this.username, recivedMessage);
+                                ServerJsonLoader.addMessage(tmp, this.username, recivedMessage);
                             }
                         }
 
@@ -100,13 +131,16 @@ public class Client {
                     }
 
                 } catch (IOException e) {
-                    closeAll();
+                    closeNetworkHandles();
                 }
             }
         }).start();
     }
 
-    private void closeAll() {
+    /**
+     *
+     */
+    private void closeNetworkHandles() {
         try {
             if (reader != null) {
                 reader.close();
@@ -122,6 +156,11 @@ public class Client {
         }
     }
 
+    /**
+     *
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
 
     }
