@@ -246,10 +246,11 @@ public class MClientInterface extends javax.swing.JFrame {
 
     private void loadChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadChatActionPerformed
         try {
-            String value = lista.getSelectedValue();
+
             DefaultListModel modelR = new DefaultListModel();
 
-            if (value == null) {
+            String value;
+            if ((value = lista.getSelectedValue()) == null) {
                 return;
             }
 
