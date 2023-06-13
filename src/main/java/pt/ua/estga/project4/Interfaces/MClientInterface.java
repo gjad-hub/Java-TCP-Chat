@@ -1,5 +1,7 @@
-package pt.ua.estga.project4;
+package pt.ua.estga.project4.Interfaces;
 
+import pt.ua.estga.project4.ClientComponents.MClientLogInterface;
+import pt.ua.estga.project4.ClientComponents.MClientLogicInterface;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -12,8 +14,9 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+import pt.ua.estga.project4.ClientComponents.JsonLoader;
 
-public class MainInterface extends javax.swing.JFrame {
+public class MClientInterface extends javax.swing.JFrame {
 
     static {
         try {
@@ -23,15 +26,32 @@ public class MainInterface extends javax.swing.JFrame {
         }
     }
 
+    /**
+     *
+     */
     private DefaultListModel messageModel;
+
+    /**
+     *
+     */
     private DefaultListModel UserModel;
+
+    /**
+     *
+     */
     private JsonLoader json;
 
-    private Client client;
+    /**
+     *
+     */
+    private MClientLogicInterface client;
 
-    public MainInterface() throws IOException {
+    /**
+     *
+     * @throws IOException
+     */
+    public MClientInterface() throws IOException {
         initComponents();
-
         this.json = new JsonLoader();
 
         //set models
@@ -39,30 +59,36 @@ public class MainInterface extends javax.swing.JFrame {
         lista.setModel((UserModel = new DefaultListModel()));
 
         try {
-            String ip = JOptionPane.showInputDialog("Endereço do servidor:");
-            if (ip.isBlank()) {
-                ip = "localhost";
-            }
-            Socket socket = new Socket(ip, 6000);
+
+            //Ask user for IP Address
+            String ip = JOptionPane.showInputDialog("Server Address:");
+            Socket socket = new Socket(ip.isBlank() ? "localhost" : ip, 6000);
+
+            //show UI, disable client interaction
+            this.setVisible(true);
+            this.setEnabled(false);
+
+            //Setup LP element
+            UserModel.addElement("lp");
 
             //Ask for email
             String username;
             do {
-                username = JOptionPane.showInputDialog("Endereço de email:");
+                username = JOptionPane.showInputDialog("Email Adress:");
             } while (username.isBlank());
 
-            client = new Client(socket, username);
+            client = new MClientLogicInterface(socket, username);
             client.listen(messageModel, UserModel);
+
+            //Set title
+            this.setTitle("ChatClient[host:" + (ip.isBlank() ? "localhost" : ip) + "] - " + client.getUsername() + ")");
+            this.setEnabled(true);
+
         } catch (IOException e) {
-            System.out.println("Não foi possivel ligar ao servidor!");
+            JOptionPane.showMessageDialog(null, "Couldnt connect to the server!");
             System.exit(0);
         }
 
-        //Set title
-        this.setTitle(client.getUsername());
-
-        //Setup LP element
-        UserModel.addElement("lp");
     }
 
     @SuppressWarnings("unchecked")
@@ -81,20 +107,39 @@ public class MainInterface extends javax.swing.JFrame {
         loadChat = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(51, 51, 51));
+        setMinimumSize(new java.awt.Dimension(707, 400));
 
+        jLabel1.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Utilizadoes conectados ");
+        jLabel1.setText("Connected Users ");
 
+        jLabel2.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Mensagens");
+        jLabel2.setText("Messages");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
+        jScrollPane1.setBackground(new java.awt.Color(51, 51, 51));
+
+        lista.setBackground(new java.awt.Color(204, 204, 204));
+        lista.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lista.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "lp" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        lista.setToolTipText("UWU");
+        lista.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(lista);
 
+        jScrollPane2.setBackground(new java.awt.Color(153, 255, 51));
+
+        mensagens.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
         jScrollPane2.setViewportView(mensagens);
 
-        enviar.setText("Enviar");
+        enviar.setBackground(new java.awt.Color(204, 204, 204));
+        enviar.setText(" ▶");
         enviar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 enviarActionPerformed(evt);
@@ -107,7 +152,9 @@ public class MainInterface extends javax.swing.JFrame {
             }
         });
 
-        loadChat.setText("Load Chat");
+        loadChat.setBackground(new java.awt.Color(153, 153, 153));
+        loadChat.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        loadChat.setText("Open Logs");
         loadChat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadChatActionPerformed(evt);
@@ -128,7 +175,7 @@ public class MainInterface extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(TFMessage)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(enviar))
+                        .addComponent(enviar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 489, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -174,13 +221,16 @@ public class MainInterface extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Sends a message to the selected client
+     */
     void sendMessage() {
         String value = lista.getSelectedValue();
-        System.out.println(value);
         String messageFormat = "message:" + value + "/" + TFMessage.getText();
-        client.send(messageFormat);
+        client.sendTCPMessageToClient(messageFormat);
         TFMessage.setText("");
     }
 
@@ -189,7 +239,6 @@ public class MainInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_enviarActionPerformed
 
     private void enviarActionPerform(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_enviarActionPerform
-
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             sendMessage();
         }
@@ -197,8 +246,13 @@ public class MainInterface extends javax.swing.JFrame {
 
     private void loadChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadChatActionPerformed
         try {
-            String value = lista.getSelectedValue();
+
             DefaultListModel modelR = new DefaultListModel();
+
+            String value;
+            if ((value = lista.getSelectedValue()) == null) {
+                return;
+            }
 
             if (value.equals("lp")) {
                 JsonLoader.LoadFile();
@@ -214,7 +268,7 @@ public class MainInterface extends javax.swing.JFrame {
                 }
             }
 
-            historico history = new historico(modelR, value, client.getUsername());
+            MClientLogInterface history = new MClientLogInterface(modelR, value, client.getUsername());
             history.setVisible(true);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -223,13 +277,12 @@ public class MainInterface extends javax.swing.JFrame {
 
     public static void main(String args[]) {
 
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             try {
-                new MainInterface().setVisible(true);
+                new MClientInterface().setVisible(true);
             } catch (IOException ex) {
-                Logger.getLogger(MainInterface.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MClientInterface.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
