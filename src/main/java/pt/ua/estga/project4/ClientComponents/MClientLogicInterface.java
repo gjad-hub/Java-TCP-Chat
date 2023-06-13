@@ -10,37 +10,24 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
+/**
+ * Structure for the data being used
+ *
+ * @author gonc,ricar
+ */
 public class MClientLogicInterface {
 
-    /**
-     *
-     */
     private Socket socket;
-
-    /**
-     *
-     */
     private BufferedReader reader;
-
-    /**
-     *
-     */
     private BufferedWriter writer;
-
-    /**
-     *
-     */
     private String username;
 
-    /**
-     *
-     * @return
-     */
     public String getUsername() {
         return username;
     }
 
     /**
+     * Logic for the Client Interface
      *
      * @param Socket
      * @param username
@@ -58,7 +45,6 @@ public class MClientLogicInterface {
 
             if (check.equals("new@user")) {
                 sendTCPMessageToClient(JOptionPane.showInputDialog("First Name:"));
-
                 sendTCPMessageToClient(JOptionPane.showInputDialog("Last Name:"));
             }
 
@@ -68,8 +54,9 @@ public class MClientLogicInterface {
     }
 
     /**
+     * sends a tcp message using BufferWriter
      *
-     * @param message
+     * @param message -> Message to be sent
      */
     public void sendTCPMessageToClient(String message) {
         try {
@@ -82,9 +69,10 @@ public class MClientLogicInterface {
     }
 
     /**
+     * Function to initiate each user's thread
      *
-     * @param modelMessages
-     * @param modelUsers
+     * @param modelMessages -> Messages box
+     * @param modelUsers -> List of users
      */
     public void listen(DefaultListModel modelMessages, DefaultListModel modelUsers) {
         new Thread(() -> {
@@ -134,7 +122,7 @@ public class MClientLogicInterface {
     }
 
     /**
-     *
+     * Closes all network handles
      */
     private void closeNetworkHandles() {
         try {
@@ -150,14 +138,5 @@ public class MClientLogicInterface {
         } catch (IOException e) {
             System.out.println(e);
         }
-    }
-
-    /**
-     *
-     * @param args
-     * @throws IOException
-     */
-    public static void main(String[] args) throws IOException {
-
     }
 }

@@ -15,6 +15,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import pt.ua.estga.project4.ClientComponents.JsonLoader;
+
 public class MClientInterface extends javax.swing.JFrame {
 
     static {
@@ -274,10 +275,6 @@ public class MClientInterface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_loadChatActionPerformed
 
-    /**
-     *
-     * @param args
-     */
     public static void main(String args[]) {
 
         /* Create and display the form */

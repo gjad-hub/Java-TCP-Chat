@@ -10,52 +10,20 @@ import java.util.ArrayList;
 
 public class SClientHandler implements Runnable {
 
-    //Lists
-    /**
-     *
-     */
     public static ArrayList<SClientHandler> ClientHandlerList = new ArrayList<>();
-
-    //Stream Elements
-    /**
-     *
-     */
     private Socket socket;
-
-    /**
-     *
-     */
     private BufferedReader streamReader;
-
-    /**
-     *
-     */
     private BufferedWriter streamWriter;
 
-    //user properties
-    /**
-     *
-     */
     private String email;
-
-    /**
-     *
-     */
     private String fnome;
-
-    /**
-     *
-     */
     private String lnome;
-
-    /**
-     *
-     */
     private int ID;
 
     /**
+     * Class that handles all connections client-server
      *
-     * @param Socket
+     * @param Socket -> Socket to be used as a reference to interact
      * @throws IOException
      */
     public SClientHandler(Socket Socket) throws IOException {
@@ -76,9 +44,13 @@ public class SClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Checks the incoming connections and stores them
+     *
+     */
     public void checkAndStoreIncomingClient() throws IOException {
 
-        if (!SClientManager.existeCliente(email)) {
+        if (!SClientManager.existsClient(email)) {
 
             sendDataToSender("new@user");
 
@@ -87,7 +59,7 @@ public class SClientHandler implements Runnable {
                 lnome = streamReader.readLine();
             } while (fnome == null || fnome.isEmpty() && lnome == null || lnome.isEmpty());
 
-            SClientManager.AdicionarCliente(email, fnome, lnome);
+            SClientManager.addClient(email, fnome, lnome);
             SClientManager.saveData();
         } else {
             sendDataToSender("---");
@@ -98,7 +70,7 @@ public class SClientHandler implements Runnable {
     }
 
     /**
-     *
+     * Starts hearing client messages from clients
      */
     @Override
     public void run() {
@@ -133,6 +105,12 @@ public class SClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Forwards messages to one client socket
+     *
+     * @param userEmail -> User that will recieve the message
+     * @param message -> The content of the message
+     */
     private void forwardIncomingMessage(String userEmail, String message) {
         for (SClientHandler client : ClientHandlerList) {
             if (client.email.equals(userEmail)) {
@@ -145,9 +123,11 @@ public class SClientHandler implements Runnable {
     }
 
     /**
+     * Also forwards messages but sends it to multiple clients
      *
-     * @param usersEmailList
-     * @param message
+     * @param usersEmailList -> String Array that contains the Senders's Email
+     * address
+     * @param message -> The content of the message to be sent
      */
     private void forwardIncomingMessageToGroup(String[] usersEmailList, String message) {
         for (String user : usersEmailList) {
@@ -163,13 +143,14 @@ public class SClientHandler implements Runnable {
     }
 
     /**
+     * Broadcasts/forwards the message to all active clients
      *
-     * @param m
+     * @param message -> the content of the message to be forwarded
      */
-    private void broadCastMessage(String m) {
+    private void broadCastMessage(String message) {
         for (SClientHandler client : ClientHandlerList) {
             try {
-                client.streamWriter.write(m);
+                client.streamWriter.write(message);
                 client.streamWriter.newLine();
                 client.streamWriter.flush();
             } catch (IOException e) {

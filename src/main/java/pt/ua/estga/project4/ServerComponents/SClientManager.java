@@ -7,22 +7,17 @@ import java.util.logging.Logger;
 
 public class SClientManager {
 
-    /**
-     *
-     */
     static private ArrayList<SClientData> list;
 
-    /**
-     * Clients Data
-     */
-    static String path;
+    static String clientDatabaseDirectory;
 
     /**
-     * Creates the clients.dat file
+     * Creates the clients.dat file that will backup the users data
      */
     public SClientManager() {
         try {
-            path = new File(".").getCanonicalPath() + "/clients.dat";
+            // gets current file directory
+            clientDatabaseDirectory = new File(".").getCanonicalPath() + "/clients.dat";
             list = new ArrayList<>();
 
             loadData();
@@ -34,21 +29,25 @@ public class SClientManager {
 
     /**
      *
-     * @param email
-     * @param nome
-     * @param sobrenome
+     * Adds client
+     *
+     * @param email -> Current user's email address
+     * @param name -> current user's name
+     * @param lastName -> current user's last name
      */
-    public static void AdicionarCliente(String email, String nome, String sobrenome) {
+    public static void addClient(String email, String name, String lastName) {
         int newId = !list.isEmpty() ? list.get(list.size() - 1).getID() + 1 : 1;
-        list.add(new SClientData(newId, email, nome, sobrenome));
+        list.add(new SClientData(newId, email, name, lastName));
     }
 
     /**
      *
-     * @param email
+     * Returns Client Data Object given the email
+     *
+     * @param email -> email of the chosen user
      * @return
      */
-    public static SClientData obterCliente(String email) {
+    public static SClientData getClient(String email) {
         for (SClientData cliente : list) {
             if (cliente.getEmail().equals(email)) {
                 return cliente;
@@ -58,13 +57,14 @@ public class SClientManager {
     }
 
     /**
+     * Searches for the existence of client ID by email
      *
-     * @param nome
+     * @param email -> client email to be found
      * @return
      */
-    public static int obterClienteID(String nome) {
+    public static int getClientID(String email) {
         for (SClientData cliente : list) {
-            if (cliente.getFirstName().equals(nome)) {
+            if (cliente.getFirstName().equals(email)) {
                 return cliente.getID();
             }
         }
@@ -76,7 +76,7 @@ public class SClientManager {
      * @param email
      * @return true if a client exists with the provided email
      */
-    public static boolean existeCliente(String email) {
+    public static boolean existsClient(String email) {
         for (SClientData cliente : list) {
             if (cliente.getEmail().equals(email)) {
                 return true;
@@ -92,7 +92,7 @@ public class SClientManager {
     public static boolean saveData() {
 
         try {
-            ObjectOutputStream obj = new ObjectOutputStream(new FileOutputStream(SClientManager.path));
+            ObjectOutputStream obj = new ObjectOutputStream(new FileOutputStream(SClientManager.clientDatabaseDirectory));
             obj.writeObject((ArrayList<SClientData>) list);
             return true;
         } catch (FileNotFoundException ex) {
@@ -108,8 +108,8 @@ public class SClientManager {
      * @throws ClassNotFoundException
      */
     public static boolean loadData() throws IOException, ClassNotFoundException {
-        if (new File(path).exists()) {
-            ObjectInputStream obj = new ObjectInputStream(new FileInputStream(path));
+        if (new File(clientDatabaseDirectory).exists()) {
+            ObjectInputStream obj = new ObjectInputStream(new FileInputStream(clientDatabaseDirectory));
             list = (ArrayList<SClientData>) obj.readObject();
 
             for (SClientData c : list) {
