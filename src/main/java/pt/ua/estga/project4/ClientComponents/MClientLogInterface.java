@@ -2,15 +2,8 @@ package pt.ua.estga.project4.ClientComponents;
 
 import javax.swing.DefaultListModel;
 
-/**
- *
- * @author ricar
- */
 public class MClientLogInterface extends javax.swing.JFrame {
 
-    /**
-     *
-     */
     public MClientLogInterface() {
         initComponents();
     }

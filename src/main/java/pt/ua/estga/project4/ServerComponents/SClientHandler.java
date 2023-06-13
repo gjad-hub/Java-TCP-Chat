@@ -8,10 +8,6 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
-/**
- *
- * @author ricar
- */
 public class SClientHandler implements Runnable {
 
     //Lists
@@ -176,9 +172,9 @@ public class SClientHandler implements Runnable {
 
     private void sendMessageToDest(SClientHandler Client, String m) {
         try {
-            this.streamWriter.write(m);
-            this.streamWriter.newLine();
-            this.streamWriter.flush();
+            Client.streamWriter.write(m);
+            Client.streamWriter.newLine();
+            Client.streamWriter.flush();
         } catch (IOException e) {
             closeAll();
         }

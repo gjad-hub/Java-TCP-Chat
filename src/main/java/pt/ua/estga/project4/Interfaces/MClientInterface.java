@@ -16,10 +16,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import pt.ua.estga.project4.ClientComponents.ServerJsonLoader;
 
-/**
- *
- * @author ricar
- */
 public class MClientInterface extends javax.swing.JFrame {
 
     static {
@@ -76,11 +72,10 @@ public class MClientInterface extends javax.swing.JFrame {
             UserModel.addElement("lp");
 
             //Ask for email EEEEEEEEEEEEEEEEEEEEEEEEEEE
-            while (((String username =   JOptionPane.showInputDialog("Email Adress:")) && username.isBlank()) {
-
-            }
-            );
-
+            String username;
+            do {
+                username = JOptionPane.showInputDialog("Email Adress:");
+            } while (username.isBlank());
 
             client = new MClientLogicInterface(socket, username);
             client.listen(messageModel, UserModel);
@@ -96,9 +91,6 @@ public class MClientInterface extends javax.swing.JFrame {
 
     }
 
-    /**
-     *
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -233,11 +225,10 @@ public class MClientInterface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     *
+     * Sends a message to the selected client
      */
     void sendMessage() {
         String value = lista.getSelectedValue();
-        System.out.println(value);
         String messageFormat = "message:" + value + "/" + TFMessage.getText();
         client.sendTCPMessageToClient(messageFormat);
         TFMessage.setText("");
@@ -248,7 +239,6 @@ public class MClientInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_enviarActionPerformed
 
     private void enviarActionPerform(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_enviarActionPerform
-
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             sendMessage();
         }
@@ -263,7 +253,7 @@ public class MClientInterface extends javax.swing.JFrame {
                 return;
             }
 
-            if (value.equals("Global")) {
+            if (value.equals("lp")) {
                 ServerJsonLoader.LoadFile();
                 ArrayList<String> listaR = ServerJsonLoader.getMessagesChat(value, value);
                 for (String s : listaR) {

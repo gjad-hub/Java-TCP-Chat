@@ -10,10 +10,6 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author gonc, ricar
- */
 public class MClientLogicInterface {
 
     /**
@@ -120,7 +116,7 @@ public class MClientLogicInterface {
 
                         if (!tmp.equals("To")) {
                             ServerJsonLoader.LoadFile();
-                            if (tmp.equals("Global")) {
+                            if (tmp.equals("lp")) {
                                 ServerJsonLoader.addMessage(tmp, tmp, recivedMessage);
                             } else {
                                 ServerJsonLoader.addMessage(tmp, this.username, recivedMessage);

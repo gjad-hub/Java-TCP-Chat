@@ -1,15 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package pt.ua.estga.project4.ServerComponents;
 
 import java.io.Serializable;
 
-/**
- *
- * @author gonc, ricar
- */
 class SClientData implements Serializable {
 
     /**

@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author ricar
- */
 public class SClientManager {
 
     /**
@@ -17,12 +13,12 @@ public class SClientManager {
     static private ArrayList<SClientData> list;
 
     /**
-     *
+     * Clients Data
      */
     static String path;
 
     /**
-     *
+     * Creates the clients.dat file
      */
     public SClientManager() {
         try {
@@ -78,7 +74,7 @@ public class SClientManager {
     /**
      *
      * @param email
-     * @return
+     * @return true if a client exists with the provided email
      */
     public static boolean existeCliente(String email) {
         for (SClientData cliente : list) {

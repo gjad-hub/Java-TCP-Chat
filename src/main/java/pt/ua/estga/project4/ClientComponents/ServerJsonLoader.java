@@ -11,10 +11,6 @@ import java.io.Writer;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-/**
- *
- * @author gonc,ricar
- */
 public class ServerJsonLoader {
 
     /**

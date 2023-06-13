@@ -1,19 +1,10 @@
 package pt.ua.estga.project4.ServerComponents;
 
-import pt.ua.estga.project4.ServerComponents.*;
 import java.net.*;
 import java.io.*;
-import java.util.Scanner;
 
-/**
- *
- * @author gonc, ricar
- */
 public class Server {
 
-    /**
-     *
-     */
     private final ServerSocket serverSocket;
 
     /**
@@ -25,7 +16,7 @@ public class Server {
     }
 
     /**
-     *
+     * Starts Server and Client Manager
      */
     public void startServer() {
 
@@ -45,7 +36,7 @@ public class Server {
     }
 
     /**
-     *
+     * Closes the ServerScoket and saves clients Data
      */
     public void closeServerSocket() {
         try {
