@@ -11,7 +11,7 @@ import java.io.Writer;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class ServerJsonLoader {
+public class JsonLoader {
 
     /**
      *
@@ -27,7 +27,7 @@ public class ServerJsonLoader {
      *
      * @throws IOException
      */
-    public ServerJsonLoader() throws IOException {
+    public JsonLoader() throws IOException {
         LoadFile();
     }
 
@@ -47,9 +47,15 @@ public class ServerJsonLoader {
             BufferedReader br = new BufferedReader(new FileReader(path));
 
             lista = new Gson().fromJson(br, messageListType);
-        } else {
-            System.out.println(path);
+            return;
         }
+        
+        File newfile  = new File(path);
+        newfile.createNewFile();
+        FileWriter writer  = new FileWriter(path);
+        writer.write("[{\"From\":\"lp\",\"To\":\"lp\",\"Message\":\"\"}]");
+        writer.close();
+        LoadFile();
     }
 
     /**
@@ -79,7 +85,7 @@ public class ServerJsonLoader {
     public static ArrayList<String> getMessagesChat(String From, String to) {
         ArrayList<String> str = new ArrayList<>();
 
-        for (Message message : ServerJsonLoader.lista) {
+        for (Message message : JsonLoader.lista) {
             if (message.getFrom().equals(From) && message.getTo().equals(to)) {
                 str.add(message.getMessage());
             }
