@@ -115,11 +115,11 @@ public class MClientLogicInterface {
                         String tmp = recivedMessage.split(":")[0];
 
                         if (!tmp.equals("To")) {
-                            ServerJsonLoader.LoadFile();
+                            JsonLoader.LoadFile();
                             if (tmp.equals("lp")) {
-                                ServerJsonLoader.addMessage(tmp, tmp, recivedMessage);
+                                JsonLoader.addMessage(tmp, tmp, recivedMessage);
                             } else {
-                                ServerJsonLoader.addMessage(tmp, this.username, recivedMessage);
+                                JsonLoader.addMessage(tmp, this.username, recivedMessage);
                             }
                         }
 

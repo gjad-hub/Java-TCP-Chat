@@ -14,8 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-import pt.ua.estga.project4.ClientComponents.ServerJsonLoader;
-
+import pt.ua.estga.project4.ClientComponents.JsonLoader;
 public class MClientInterface extends javax.swing.JFrame {
 
     static {
@@ -39,7 +38,7 @@ public class MClientInterface extends javax.swing.JFrame {
     /**
      *
      */
-    private ServerJsonLoader json;
+    private JsonLoader json;
 
     /**
      *
@@ -52,7 +51,7 @@ public class MClientInterface extends javax.swing.JFrame {
      */
     public MClientInterface() throws IOException {
         initComponents();
-        this.json = new ServerJsonLoader();
+        this.json = new JsonLoader();
 
         //set models
         mensagens.setModel((messageModel = new DefaultListModel()));
@@ -254,14 +253,14 @@ public class MClientInterface extends javax.swing.JFrame {
             }
 
             if (value.equals("lp")) {
-                ServerJsonLoader.LoadFile();
-                ArrayList<String> listaR = ServerJsonLoader.getMessagesChat(value, value);
+                JsonLoader.LoadFile();
+                ArrayList<String> listaR = JsonLoader.getMessagesChat(value, value);
                 for (String s : listaR) {
                     modelR.addElement(s);
                 }
             } else {
-                ServerJsonLoader.LoadFile();
-                ArrayList<String> listaR = ServerJsonLoader.getMessagesChat(value, client.getUsername());
+                JsonLoader.LoadFile();
+                ArrayList<String> listaR = JsonLoader.getMessagesChat(value, client.getUsername());
                 for (String s : listaR) {
                     modelR.addElement(s);
                 }

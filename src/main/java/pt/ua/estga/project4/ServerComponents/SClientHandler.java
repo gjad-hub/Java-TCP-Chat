@@ -137,9 +137,9 @@ public class SClientHandler implements Runnable {
         for (SClientHandler client : ClientHandlerList) {
             if (client.email.equals(userEmail)) {
                 //Successful Message
-                sendDataToSender("To: " + client.email + ": " + message.split("/")[1]);
+                sendDataToSender("To: " + client.email + ": " + message);
                 //Forwarded message
-                sendDataToDest(client, email + ": " + message.split("/")[1]);
+                sendDataToDest(client, email + ": " + message);
             }
         }
     }
