@@ -10,22 +10,21 @@ public class MClientLogInterface extends javax.swing.JFrame {
 
     /**
      *
-     * @param modelR
-     * @param fromSender
-     * @param toReciever
+     * @param modelR -> Client Message Container ( JList )
+     * @param senderTarget -> The name of the person who sent the message
+     * @param toReciever -> The name of the target of the message
      */
-    public MClientLogInterface(DefaultListModel modelR, String fromSender, String toReciever) {
+    public MClientLogInterface(DefaultListModel modelR, String senderTarget, String toReciever) {
         initComponents();
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         recebidas.setModel(modelR);
 
-        if (fromSender.equals("GlobalChat")) {
-            fromSender = "GlobalChat";
+        if (senderTarget.equals("GlobalChat")) {
             toReciever = "Everyone";
         }
 
-        String historyMessageStructure = "Logs between " + fromSender + " And " + toReciever + ":";
+        String historyMessageStructure = "Logs between " + senderTarget + " And " + toReciever + ":";
 
         this.setTitle(historyMessageStructure);
         me.setText(historyMessageStructure);
