@@ -71,7 +71,7 @@ public class MClientInterface extends javax.swing.JFrame {
             //Setup LP element
             UserModel.addElement("lp");
 
-            //Ask for email 
+            //Ask for email
             String username;
             do {
                 username = JOptionPane.showInputDialog("Email Adress:");
@@ -80,14 +80,14 @@ public class MClientInterface extends javax.swing.JFrame {
             client = new MClientLogicInterface(socket, username);
             client.listen(messageModel, UserModel);
 
+            //Set title
+            this.setTitle("ChatClient[host:" + ip + "] - " + client.getUsername() + ")");
+            this.setEnabled(true);
+
         } catch (IOException e) {
-            System.out.println("Couldnt connect to the server!");
+            JOptionPane.showMessageDialog(null, "Couldnt connect to the server!");
             System.exit(0);
         }
-
-        //Set title
-        this.setTitle("ChatClient(" + client.getUsername() + ")");
-        this.setEnabled(true);
 
     }
 

@@ -80,7 +80,7 @@ public class SClientHandler implements Runnable {
 
         if (!SClientManager.existeCliente(email)) {
 
-            sendMessageToSender("new@user");
+            sendDataToSender("new@user");
 
             do {
                 fnome = streamReader.readLine();
@@ -90,7 +90,7 @@ public class SClientHandler implements Runnable {
             SClientManager.AdicionarCliente(email, fnome, lnome);
             SClientManager.saveData();
         } else {
-            sendMessageToSender("---");
+            sendDataToSender("---");
         }
 
         ClientHandlerList.add(this);
@@ -103,7 +103,7 @@ public class SClientHandler implements Runnable {
     @Override
     public void run() {
 
-        try {//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        try {
 
             while (socket.isConnected()) {
 
@@ -123,20 +123,42 @@ public class SClientHandler implements Runnable {
                     }
 
                     if (incomingMessage.split(":")[0].equals("message")) {
-                        for (SClientHandler client : ClientHandlerList) {
-                            if (client.email.equals(userEmail)) {
-                                //Successful Message
-                                sendMessageToSender("To: " + client.email + ": " + message);
-                                //Forwarded message
-                                sendMessageToDest(client, email + ": " + message);
-                            }
-                        }
+                        forwardIncomingMessage(userEmail, message);
                     }
 
                 }
             }
         } catch (IOException e) {
             closeAll();
+        }
+    }
+
+    private void forwardIncomingMessage(String userEmail, String message) {
+        for (SClientHandler client : ClientHandlerList) {
+            if (client.email.equals(userEmail)) {
+                //Successful Message
+                sendDataToSender("To: " + client.email + ": " + message.split("/")[1]);
+                //Forwarded message
+                sendDataToDest(client, email + ": " + message.split("/")[1]);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param usersEmailList
+     * @param message
+     */
+    private void forwardIncomingMessageToGroup(String[] usersEmailList, String message) {
+        for (String user : usersEmailList) {
+            for (SClientHandler client : ClientHandlerList) {
+                if (client.email.equals(user)) {
+                    //Successful Message
+                    sendDataToSender("To: " + client.email + ": " + message.split("/")[1]);
+                    //Forwarded message
+                    sendDataToDest(client, email + ": " + message.split("/")[1]);
+                }
+            }
         }
     }
 
@@ -161,7 +183,7 @@ public class SClientHandler implements Runnable {
      * @param c
      * @param m
      */
-    private void sendMessageToSender(String m) {
+    private void sendDataToSender(String m) {
         try {
             this.streamWriter.write(m);
             this.streamWriter.newLine();
@@ -171,7 +193,7 @@ public class SClientHandler implements Runnable {
         }
     }
 
-    private void sendMessageToDest(SClientHandler Client, String m) {
+    private void sendDataToDest(SClientHandler Client, String m) {
         try {
             Client.streamWriter.write(m);
             Client.streamWriter.newLine();
