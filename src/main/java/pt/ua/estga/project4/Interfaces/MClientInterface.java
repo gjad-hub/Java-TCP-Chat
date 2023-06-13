@@ -81,7 +81,7 @@ public class MClientInterface extends javax.swing.JFrame {
             client.listen(messageModel, UserModel);
 
             //Set title
-            this.setTitle("ChatClient[host:" + ip + "] - " + client.getUsername() + ")");
+            this.setTitle("ChatClient[host:" + (ip.isBlank() ? "localhost" : ip) + "] - " + client.getUsername() + ")");
             this.setEnabled(true);
 
         } catch (IOException e) {
