@@ -71,7 +71,7 @@ public class MClientInterface extends javax.swing.JFrame {
             //Setup LP element
             UserModel.addElement("lp");
 
-            //Ask for email EEEEEEEEEEEEEEEEEEEEEEEEEEE
+            //Ask for email 
             String username;
             do {
                 username = JOptionPane.showInputDialog("Email Adress:");

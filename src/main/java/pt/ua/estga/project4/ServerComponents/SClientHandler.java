@@ -114,20 +114,21 @@ public class SClientHandler implements Runnable {
 
                 String[] messageStructure = incomingMessage.split("/");
                 String userEmail = incomingMessage.split(":")[1].split("/")[0];
+                String message = incomingMessage.split("/")[1];
 
                 if (messageStructure.length - 1 != 0) {
 
                     if (messageStructure[0].equals("message:lp")) {
-                        broadCastMessage("lp: " + incomingMessage.split("/")[1]);
+                        broadCastMessage("lp: " + message);
                     }
 
                     if (incomingMessage.split(":")[0].equals("message")) {
                         for (SClientHandler client : ClientHandlerList) {
                             if (client.email.equals(userEmail)) {
                                 //Successful Message
-                                sendMessageToSender("To: " + client.email + ": " + incomingMessage.split("/")[1]);
+                                sendMessageToSender("To: " + client.email + ": " + message);
                                 //Forwarded message
-                                sendMessageToDest(client, email + ": " + incomingMessage.split("/")[1]);
+                                sendMessageToDest(client, email + ": " + message);
                             }
                         }
                     }
